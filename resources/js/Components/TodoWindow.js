@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {Container,Row,Col,Form,Button} from 'react-bootstrap';
+import axios from 'axios';
 
 const todoWindowStyle={
     maxWidth:700,
@@ -33,33 +34,60 @@ const TodoList ={
 }
 
 function TodoWindow(){
-    const [todoList,setTodoList] = useState([{}]);
-    const [todoValue,setTodoValue] = useState("");
 
-    function handleToggle(id,v){
-        const newTodoList = todoList.map((item,itemId)=>{
-            console.log(id,itemId)
-            if(id == itemId){
+    useEffect(()=>{
+         function get(){
+            axios.get("/getList").then(  function(response){
+                setTodoList(response.data);
+            }).catch(function(error){
+                console.log(error)
+            });
+        }
+         get()
+    },[])
 
-                const updatedItem = {
-                    ...item,
-                    selected:v == "on" ? true : false
-                };
-                return updatedItem;
+    const [todoList,setTodoList] = useState([{
+     }])
+    const [todoText,setTodoText] = useState("");
+
+
+    console.log(todoList)
+    function handleCheck(key){
+        const newList = todoList.map((item,index)=>{
+          if(index === key){
+            const updated = {
+              ...item,
+              checked:!item.checked
             }
-            return item;
+            
+            return updated;
+          }
+          return(item)
         })
-
-        setTodoList(newTodoList)
-        console.log(todoList)
-
-    }
-
-    function addHandler(){
+    
+        setTodoList(newList)
         
-        setTodoList([...todoList,{value:todoValue,selected:false}])
-        setTodoValue("");
-    }
+      }
+
+      function handleSubmit(){
+        if(todoText)
+        {   
+            setTodoList([...todoList,{todoText:todoText,checked:false}])
+
+            axios.post("/postList",{
+                todoValue:todoText,
+                checked:false
+            }).then(function(response){
+                console.log(response);
+            }).catch(function(error){
+                console.log(error)
+            })
+
+        }
+        
+      }
+
+     // console.log(todoList)
 
     
     return(
@@ -71,20 +99,20 @@ function TodoWindow(){
         </Row>
         <Row style={RowStyleContent}>
             <Col>
-                <Form.Control type="text" placeholder="Enter Todo Here" value={todoValue} onChange={(e)=>setTodoValue(e.target.value)}/>
+                <Form.Control type="text" placeholder="Enter Todo Here" value={todoText} onChange={(e)=>setTodoText(e.target.value)}/>
             </Col>
             <Col xs="auto">
-                <Button variant="primary" onClick={addHandler}>Ekle</Button>
+                <Button variant="primary" onClick={()=>handleSubmit()}>Ekle</Button>
             </Col>
         </Row>
         {todoList.map((v,k)=>{
-            return v.value ?
+            return v.todoText ?
         <Row  style={TodoList}  className="rounded" key={k}>
         <Col xs="auto">
-        <Form.Check type="switch"  defaultChecked={false} onChange={(e)=>handleToggle(k,e.target.value)}/>
+        <Form.Check type="switch"  defaultChecked={false} onChange={()=>handleCheck(k)}/>
         </Col>
         <Col>
-            {v.value}
+            {v.todoText}
         </Col>
         <Col xs="auto" className="rounded">
             <Button variant="primary">Düzenle</Button>

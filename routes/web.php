@@ -18,4 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("/add",[TodoController::class,"add"]);
+Route::get("/getList",[TodoController::class,"get"]);
+
+Route::post("/postList",[TodoController::class,"post"]);
