@@ -6407,8 +6407,6 @@ function TodoWindow() {
       todoText = _useState4[0],
       setTodoText = _useState4[1];
 
-  console.log(todoList);
-
   function handleCheck(key) {
     var newList = todoList.map(function (item, index) {
       if (index === key) {
@@ -6426,22 +6424,34 @@ function TodoWindow() {
 
   function handleSubmit() {
     if (todoText) {
-      setTodoList([].concat(_toConsumableArray(todoList), [{
-        todoText: todoText,
-        checked: false
-      }]));
       axios__WEBPACK_IMPORTED_MODULE_1___default().post("/postList", {
         todoValue: todoText,
         checked: false
       }).then(function (response) {
-        console.log(response);
+        setTodoList([].concat(_toConsumableArray(todoList), [response.data[0]]));
       })["catch"](function (error) {
         console.log(error);
       });
     }
-  } // console.log(todoList)
+  }
 
+  function handleDelete(key) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().post("/deletePost", {
+      id: key
+    }).then(function (response) {
+      if (response.status === 200) {
+        setTodoList(function (todoList) {
+          return todoList.filter(function (item) {
+            return item.id !== key;
+          });
+        });
+      }
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  }
 
+  console.log(todoList);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["default"], {
     style: todoWindowStyle,
     className: "rounded border",
@@ -6498,6 +6508,9 @@ function TodoWindow() {
           className: "rounded",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["default"], {
             variant: "warning",
+            onClick: function onClick() {
+              return handleDelete(v.id);
+            },
             children: "Sil"
           })
         })]

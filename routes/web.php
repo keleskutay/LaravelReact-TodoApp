@@ -21,3 +21,5 @@ Route::get('/', function () {
 Route::get("/getList",[TodoController::class,"get"]);
 
 Route::post("/postList",[TodoController::class,"post"]);
+
+Route::post("/deletePost",[TodoController::class,"delete"]);

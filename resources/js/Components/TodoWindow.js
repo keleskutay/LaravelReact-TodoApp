@@ -51,7 +51,7 @@ function TodoWindow(){
     const [todoText,setTodoText] = useState("");
 
 
-    console.log(todoList)
+    
     function handleCheck(key){
         const newList = todoList.map((item,index)=>{
           if(index === key){
@@ -71,24 +71,32 @@ function TodoWindow(){
 
       function handleSubmit(){
         if(todoText)
-        {   
-            setTodoList([...todoList,{todoText:todoText,checked:false}])
-
+        {
             axios.post("/postList",{
                 todoValue:todoText,
                 checked:false
             }).then(function(response){
-                console.log(response);
+                setTodoList([...todoList,response.data[0]])
             }).catch(function(error){
-                console.log(error)
+                console.log(error);
             })
-
         }
-        
       }
 
-     // console.log(todoList)
+     function handleDelete(key){
+         axios.post("/deletePost",{
+             id:key
+         }).then(function(response){
+             if(response.status === 200){
+                    setTodoList(todoList => todoList.filter(item=>item.id !== key));
+   
+             }
+         }).catch(function(error){
+             console.log(error);
+         })
 
+     }
+     console.log(todoList)
     
     return(
     <Container style={todoWindowStyle} className='rounded border'>
@@ -118,7 +126,7 @@ function TodoWindow(){
             <Button variant="primary">Düzenle</Button>
         </Col>
         <Col  xs="auto" className="rounded">
-            <Button variant="warning">Sil</Button>
+            <Button variant="warning" onClick={()=>handleDelete(v.id)}>Sil</Button>
         </Col>
     </Row>
     : ""

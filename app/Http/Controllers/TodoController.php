@@ -17,7 +17,15 @@ class TodoController extends Controller
        $todo->checked = $request->checked;
        $saved = $todo->save();
 
-        return(response()->json([$saved]));
+        return(response()->json([$todo]));
+    }
+
+    public function delete(Request $request){
+        $todo = $request->id;
+        $find = todo::find($todo);
+        $find->delete();
+
+
     }
 
 }
