@@ -102,7 +102,7 @@ function TodoWindow(){
     <Container style={todoWindowStyle} className='rounded border'>
         <Row style={RowStyleHead} className='rounded' className="border rounded" >
             <Col>
-                Todos (x)
+                Todos {todoList.length}
             </Col>
         </Row>
         <Row style={RowStyleContent}>
