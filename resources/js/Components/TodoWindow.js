@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {Container,Row,Col,Form,Button} from 'react-bootstrap';
+import {Container,Row,Col,Form,Button,Spinner} from 'react-bootstrap';
 import axios from 'axios';
 
 const todoWindowStyle={
@@ -34,20 +34,26 @@ const TodoList ={
 }
 
 function TodoWindow(){
+    
+    const [loading,setLoading] = useState(true);
 
     useEffect(()=>{
-         function get(){
-            axios.get("/getList").then(function(response){
-                setTodoList(response.data);
-            }).catch(function(error){
-                console.log(error)
-            });
-        }
-         get()
-    },[])
+      async function get(){
+        await axios.get("/getList").then(function(response){
+             setTodoList(response.data);
+             
+         }).catch(function(error){
+             console.log(error)
+         });
+         setLoading(false)
+     }
+      get()
+      
+  },[])
 
     const [todoList,setTodoList] = useState([{
-     }])
+    }])
+    
     const [todoText,setTodoText] = useState("");
 
 
@@ -104,9 +110,12 @@ function TodoWindow(){
     
     return(
     <Container style={todoWindowStyle} className='rounded border'>
+        
+            {!loading ? 
+            <div>
         <Row style={RowStyleHead} className='rounded' className="border rounded" >
             <Col>
-                Todos {todoList.length}
+                Todo {todoList.length}
             </Col>
         </Row>
         <Row style={RowStyleContent}>
@@ -135,9 +144,12 @@ function TodoWindow(){
     </Row>
     : ""
         })}
-        
+         </div>
+        : <center><Spinner animation="border" /></center>}
+
+       
     </Container>
-      
+    
     )
 }
 
