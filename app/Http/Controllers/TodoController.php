@@ -24,7 +24,13 @@ class TodoController extends Controller
         $todo = $request->id;
         $find = todo::find($todo);
         $find->delete();
+    }
 
+    public function update(Request $request){
+        $todo = $request->id;
+        $checked = $request->checked;
+        $findUpdate = todo::where("id",$todo)->update(["checked"=>$checked]);
+        return($findUpdate);
 
     }
 

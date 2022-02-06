@@ -37,7 +37,7 @@ function TodoWindow(){
 
     useEffect(()=>{
          function get(){
-            axios.get("/getList").then(  function(response){
+            axios.get("/getList").then(function(response){
                 setTodoList(response.data);
             }).catch(function(error){
                 console.log(error)
@@ -53,21 +53,25 @@ function TodoWindow(){
 
     
     function handleCheck(key){
-        const newList = todoList.map((item,index)=>{
-          if(index === key){
-            const updated = {
-              ...item,
-              checked:!item.checked
+        todoList.map((item,index)=>{
+            if(item.id === key){
+                item.checked = + !item.checked;
+                axios.post("/checkPost",{
+                    id:key,
+                    checked: item.checked
+                }).then(function(response){
+                    if(response.status === 200){
+                        return("ok");
+                    }
+                }).catch(function(error){
+                    console.log(error);
+                })
             }
             
-            return updated;
-          }
-          return(item)
         })
-    
-        setTodoList(newList)
-        
       }
+
+      
 
       function handleSubmit(){
         if(todoText)
@@ -96,7 +100,7 @@ function TodoWindow(){
          })
 
      }
-     console.log(todoList)
+
     
     return(
     <Container style={todoWindowStyle} className='rounded border'>
@@ -117,7 +121,7 @@ function TodoWindow(){
             return v.todoText ?
         <Row  style={TodoList}  className="rounded" key={k}>
         <Col xs="auto">
-        <Form.Check type="switch"  defaultChecked={false} onChange={()=>handleCheck(k)}/>
+        <Form.Check type="switch"  defaultChecked={v.checked} onChange={()=>handleCheck(v.id)}/>
         </Col>
         <Col>
             {v.todoText}

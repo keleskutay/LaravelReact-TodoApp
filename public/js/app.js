@@ -6332,10 +6332,6 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -6408,18 +6404,21 @@ function TodoWindow() {
       setTodoText = _useState4[1];
 
   function handleCheck(key) {
-    var newList = todoList.map(function (item, index) {
-      if (index === key) {
-        var updated = _objectSpread(_objectSpread({}, item), {}, {
-          checked: !item.checked
+    todoList.map(function (item, index) {
+      if (item.id === key) {
+        item.checked = +!item.checked;
+        axios__WEBPACK_IMPORTED_MODULE_1___default().post("/checkPost", {
+          id: key,
+          checked: item.checked
+        }).then(function (response) {
+          if (response.status === 200) {
+            return "ok";
+          }
+        })["catch"](function (error) {
+          console.log(error);
         });
-
-        return updated;
       }
-
-      return item;
     });
-    setTodoList(newList);
   }
 
   function handleSubmit() {
@@ -6451,7 +6450,6 @@ function TodoWindow() {
     });
   }
 
-  console.log(todoList);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["default"], {
     style: todoWindowStyle,
     className: "rounded border",
@@ -6489,9 +6487,9 @@ function TodoWindow() {
           xs: "auto",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"].Check, {
             type: "switch",
-            defaultChecked: false,
+            defaultChecked: v.checked,
             onChange: function onChange() {
-              return handleCheck(k);
+              return handleCheck(v.id);
             }
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
