@@ -1,6 +1,12 @@
 ## React JS - Laravel ----- Todo App
 Planları takip etme ve değiştirme için yapılmış, Front endde React.JS framework'u ve backend de Laravel frameworku kullandığım bir uygulama
 
+### Gerekenler
+- Composer
+- Laravel (8.x)
+- Node.JS
+- Mysql
+
 <center><img src="todo.png" alt="Todo List App"/></center>
 
 ### Çalıştırma
