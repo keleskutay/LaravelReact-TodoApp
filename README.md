@@ -6,6 +6,7 @@ Planları takip etme ve değiştirme için yapılmış, Front endde React.JS fra
 - Laravel (8.x)
 - Node.JS
 - Mysql
+- React
 
 <center><img src="todo.png" alt="Todo List App"/></center>
 
