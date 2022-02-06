@@ -41,11 +41,12 @@ function TodoWindow(){
       async function get(){
         await axios.get("/getList").then(function(response){
              setTodoList(response.data);
+             setLoading(false)
              
          }).catch(function(error){
              console.log(error)
          });
-         setLoading(false)
+         
      }
       get()
       
@@ -80,15 +81,20 @@ function TodoWindow(){
       
 
       function handleSubmit(event){
-        if(event.key === "Enter"){
+        if(todoText){
+        if(event.key === "Enter" || event.type === "click"){
             axios.post("/postList",{
                 todoValue:todoText,
                 checked:false
             }).then(function(response){
                 setTodoList([...todoList,response.data[0]])
             }).catch(function(error){
-                alert(error)
+                console.error(error)
             })
+        }
+    }
+        else{
+            return(false);
         }
         
         
@@ -124,7 +130,7 @@ function TodoWindow(){
                 <Form.Control type="text" onKeyDown={(e)=>handleSubmit(e)} placeholder="Enter Todo Here" value={todoText} onChange={(e)=>setTodoText(e.target.value)}/>
             </Col>
             <Col xs="auto">
-                <Button variant="primary" onClick={()=>handleSubmit()} >Ekle</Button>
+                <Button variant="primary" onClick={(e)=>handleSubmit(e)} >Ekle</Button>
             </Col>
         </Row>
         {todoList.map((v,k)=>{

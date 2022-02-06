@@ -6420,14 +6420,12 @@ function TodoWindow() {
                 _context.next = 2;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default().get("/getList").then(function (response) {
                   setTodoList(response.data);
+                  setLoading(false);
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
               case 2:
-                setLoading(false);
-
-              case 3:
               case "end":
                 return _context.stop();
             }
@@ -6469,15 +6467,19 @@ function TodoWindow() {
   }
 
   function handleSubmit(event) {
-    if (event.key === "Enter") {
-      axios__WEBPACK_IMPORTED_MODULE_2___default().post("/postList", {
-        todoValue: todoText,
-        checked: false
-      }).then(function (response) {
-        setTodoList([].concat(_toConsumableArray(todoList), [response.data[0]]));
-      })["catch"](function (error) {
-        alert(error);
-      });
+    if (todoText) {
+      if (event.key === "Enter" || event.type === "click") {
+        axios__WEBPACK_IMPORTED_MODULE_2___default().post("/postList", {
+          todoValue: todoText,
+          checked: false
+        }).then(function (response) {
+          setTodoList([].concat(_toConsumableArray(todoList), [response.data[0]]));
+        })["catch"](function (error) {
+          console.error(error);
+        });
+      }
+    } else {
+      return false;
     }
   }
 
@@ -6524,8 +6526,8 @@ function TodoWindow() {
           xs: "auto",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
             variant: "primary",
-            onClick: function onClick() {
-              return handleSubmit();
+            onClick: function onClick(e) {
+              return handleSubmit(e);
             },
             children: "Ekle"
           })
