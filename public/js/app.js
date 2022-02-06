@@ -6242,11 +6242,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Nav */ "./resources/js/Components/Nav.js");
 /* harmony import */ var _TodoWindow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TodoWindow */ "./resources/js/Components/TodoWindow.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
+/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -6256,15 +6253,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Nav__WEBPACK_IMPORTED_MODULE_2__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_TodoWindow__WEBPACK_IMPORTED_MODULE_3__["default"], {})]
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Nav__WEBPACK_IMPORTED_MODULE_2__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_TodoWindow__WEBPACK_IMPORTED_MODULE_3__["default"], {})]
   });
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
 
 if (document.getElementById('root')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(App, {}), document.getElementById('root'));
+  react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(App, {}), document.getElementById('root'));
 }
 
 /***/ }),
@@ -6471,15 +6468,15 @@ function TodoWindow() {
     });
   }
 
-  function handleSubmit() {
-    if (todoText) {
+  function handleSubmit(event) {
+    if (event.key === "Enter") {
       axios__WEBPACK_IMPORTED_MODULE_2___default().post("/postList", {
         todoValue: todoText,
         checked: false
       }).then(function (response) {
         setTodoList([].concat(_toConsumableArray(todoList), [response.data[0]]));
       })["catch"](function (error) {
-        console.log(error);
+        alert(error);
       });
     }
   }
@@ -6514,6 +6511,9 @@ function TodoWindow() {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["default"].Control, {
             type: "text",
+            onKeyDown: function onKeyDown(e) {
+              return handleSubmit(e);
+            },
             placeholder: "Enter Todo Here",
             value: todoText,
             onChange: function onChange(e) {

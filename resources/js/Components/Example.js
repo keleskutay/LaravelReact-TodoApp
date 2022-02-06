@@ -2,7 +2,6 @@ import {React} from 'react';
 import ReactDOM from 'react-dom';
 import Nav from "./Nav";
 import TodoWindow from "./TodoWindow";
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {

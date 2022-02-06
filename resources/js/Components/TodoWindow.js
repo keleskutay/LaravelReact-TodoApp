@@ -79,18 +79,19 @@ function TodoWindow(){
 
       
 
-      function handleSubmit(){
-        if(todoText)
-        {
+      function handleSubmit(event){
+        if(event.key === "Enter"){
             axios.post("/postList",{
                 todoValue:todoText,
                 checked:false
             }).then(function(response){
                 setTodoList([...todoList,response.data[0]])
             }).catch(function(error){
-                console.log(error);
+                alert(error)
             })
         }
+        
+        
       }
 
      function handleDelete(key){
@@ -120,10 +121,10 @@ function TodoWindow(){
         </Row>
         <Row style={RowStyleContent}>
             <Col>
-                <Form.Control type="text" placeholder="Enter Todo Here" value={todoText} onChange={(e)=>setTodoText(e.target.value)}/>
+                <Form.Control type="text" onKeyDown={(e)=>handleSubmit(e)} placeholder="Enter Todo Here" value={todoText} onChange={(e)=>setTodoText(e.target.value)}/>
             </Col>
             <Col xs="auto">
-                <Button variant="primary" onClick={()=>handleSubmit()}>Ekle</Button>
+                <Button variant="primary" onClick={()=>handleSubmit()} >Ekle</Button>
             </Col>
         </Row>
         {todoList.map((v,k)=>{
