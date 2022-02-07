@@ -59,23 +59,15 @@ function TodoWindow(){
 
 
     
-    function handleCheck(key){
-        todoList.map((item,index)=>{
-            if(item.id === key){
-                item.checked = + !item.checked;
-                axios.post("/checkPost",{
+    function handleCheck(key,checked){
+            axios.post("/checkPost",{
                     id:key,
-                    checked: item.checked
+                    checked: !checked
                 }).then(function(response){
-                    if(response.status === 200){
-                        return("ok");
-                    }
+                    setTodoList([...todoList],response.data[0])
                 }).catch(function(error){
                     console.log(error);
                 })
-            }
-            
-        })
       }
 
       
@@ -91,7 +83,9 @@ function TodoWindow(){
             }).catch(function(error){
                 console.error(error)
             })
+            setTodoText("");
         }
+        
     }
         else{
             return(false);
@@ -106,6 +100,7 @@ function TodoWindow(){
          }).then(function(response){
              if(response.status === 200){
                     setTodoList(todoList => todoList.filter(item=>item.id !== key));
+                    //console.log(todoList);
    
              }
          }).catch(function(error){
@@ -135,9 +130,9 @@ function TodoWindow(){
         </Row>
         {todoList.map((v,k)=>{
             return v.todoText ?
-        <Row  style={TodoList}  className="rounded" key={k}>
+        <Row  style={TodoList}  className="rounded" key={v.id}>
         <Col xs="auto">
-        <Form.Check type="switch"  defaultChecked={v.checked} onChange={()=>handleCheck(v.id)}/>
+        <Form.Check type="switch"  defaultChecked={v.checked} onChange={()=>handleCheck(v.id,v.checked)}/>
         </Col>
         <Col>
             {v.todoText}

@@ -30,7 +30,7 @@ class TodoController extends Controller
         $todo = $request->id;
         $checked = $request->checked;
         $findUpdate = todo::where("id",$todo)->update(["checked"=>$checked]);
-        return($findUpdate);
+        return(response()->json([todo::find($todo)]));
 
     }
 

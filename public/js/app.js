@@ -6448,21 +6448,14 @@ function TodoWindow() {
       todoText = _useState6[0],
       setTodoText = _useState6[1];
 
-  function handleCheck(key) {
-    todoList.map(function (item, index) {
-      if (item.id === key) {
-        item.checked = +!item.checked;
-        axios__WEBPACK_IMPORTED_MODULE_2___default().post("/checkPost", {
-          id: key,
-          checked: item.checked
-        }).then(function (response) {
-          if (response.status === 200) {
-            return "ok";
-          }
-        })["catch"](function (error) {
-          console.log(error);
-        });
-      }
+  function handleCheck(key, checked) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default().post("/checkPost", {
+      id: key,
+      checked: !checked
+    }).then(function (response) {
+      setTodoList(_toConsumableArray(todoList), response.data[0]);
+    })["catch"](function (error) {
+      console.log(error);
     });
   }
 
@@ -6477,6 +6470,7 @@ function TodoWindow() {
         })["catch"](function (error) {
           console.error(error);
         });
+        setTodoText("");
       }
     } else {
       return false;
@@ -6492,7 +6486,7 @@ function TodoWindow() {
           return todoList.filter(function (item) {
             return item.id !== key;
           });
-        });
+        }); //console.log(todoList);
       }
     })["catch"](function (error) {
       console.log(error);
@@ -6542,7 +6536,7 @@ function TodoWindow() {
               type: "switch",
               defaultChecked: v.checked,
               onChange: function onChange() {
-                return handleCheck(v.id);
+                return handleCheck(v.id, v.checked);
               }
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -6565,7 +6559,7 @@ function TodoWindow() {
               children: "Sil"
             })
           })]
-        }, k) : "";
+        }, v.id) : "";
       })]
     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("center", {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
